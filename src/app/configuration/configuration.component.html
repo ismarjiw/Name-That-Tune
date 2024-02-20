@@ -1,0 +1,37 @@
+<div *ngIf="authLoading || configLoading">Loading...</div>
+
+<div *ngIf="!authLoading && !configLoading">
+    <div class="difficulty-content">
+        <h2>Difficulty:</h2>
+        <button>Easy</button>
+        <button>Medium</button>
+        <button>Hard</button>
+    </div>
+
+    <div class="rounds-content">
+        <h2>Rounds:</h2>
+        <button>5</button>
+        <button>10</button>
+        <button>15</button>
+    </div>
+
+    <div class="genres-content">
+        <h2>Genre:</h2>
+        <select [(ngModel)]="selectedGenre" (ngModelChange)="setGenre($event)">
+            <option [value]=""></option>
+            <option [value]="genre" *ngFor="let genre of genres">
+            {{ genre }}
+            </option>
+        </select>
+    </div>
+
+    <div *ngFor="let track of tracks">
+        <p>{{ track.track.name }}</p>
+        <p>{{ track.track.artists[0].name }}</p>
+        <audio controls>
+            <source [src]="track.track.preview_url" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+</div>
