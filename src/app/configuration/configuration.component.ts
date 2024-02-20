@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AUTH_ENDPOINT, TOKEN_KEY } from '../home/home.component';
 import fetchFromSpotify, { request } from 'src/services/api';
-import { SpotifyService } from '../spotify.service'; 
 
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
-  styleUrls: ['./configuration.component.css']
+  styleUrls: ['./configuration.component.css'],
 })
 export class ConfigurationComponent implements OnInit {
-
-  constructor(private spotifyService: SpotifyService) { }
+  
+  constructor() {}
 
   genres: String[] = ["House", "Alternative", "J-Rock", "R&B"];
   selectedGenre: String = "";
@@ -23,7 +22,7 @@ export class ConfigurationComponent implements OnInit {
 
   firstPlaylist: any;
   firstPlaylistId: String = '';
-  tracks: any[] = [];
+  public tracks: any[] = [];
 
   async ngOnInit(): Promise<void> {
     this.authLoading = true;
@@ -60,10 +59,16 @@ export class ConfigurationComponent implements OnInit {
     });
 
     this.genres = response.categories.items.map((category: any) => {
+
+      // Exclude the genre "Spotify Classics"
+      if (category.name === "Spotify CLASSICS") {
+        return null;
+      }
       // Populate the genre to categoryId mapping
       this.genreCategoryMapping[category.name.toLowerCase()] = category.id;
       return category.name;
-    });
+    })
+    .filter(Boolean); // Remove null values from the array
 
     this.configLoading = false;
   };
@@ -139,5 +144,4 @@ export class ConfigurationComponent implements OnInit {
       return null;
     }
   }
-
 }

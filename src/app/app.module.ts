@@ -6,11 +6,16 @@ import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { ConfigurationComponent } from './configuration/configuration.component';
+import { GameComponent } from './game/game.component';
 
-const routes: Routes = [{ path: "", component: HomeComponent }];
+
+const routes: Routes = [
+  { path: "", component: HomeComponent },
+  { path: "game", component: GameComponent }
+];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, ConfigurationComponent],
+  declarations: [AppComponent, HomeComponent, ConfigurationComponent, GameComponent],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [],
   bootstrap: [AppComponent],
