@@ -98,7 +98,8 @@ export class ConfigurationComponent implements OnInit {
       const response = await fetchFromSpotify({ token: this.token, endpoint: endpoint });
       
       // Extract tracks from the response
-      const tracks = response.items;
+      // const tracks = response.items;
+      const tracks = response.items.filter((track: any) => track.track.preview_url !== null);
   
       // Log the tracks or process them as needed
       console.log('Tracks:', tracks);
