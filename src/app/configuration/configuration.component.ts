@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AUTH_ENDPOINT, TOKEN_KEY } from '../home/home.component';
 import fetchFromSpotify, { request } from 'src/services/api';
+import { SpotifyService } from '../spotify.service'; 
 
 @Component({
   selector: 'app-configuration',
@@ -9,7 +10,7 @@ import fetchFromSpotify, { request } from 'src/services/api';
 })
 export class ConfigurationComponent implements OnInit {
 
-  constructor() { }
+  constructor(private spotifyService: SpotifyService) { }
 
   genres: String[] = ["House", "Alternative", "J-Rock", "R&B"];
   selectedGenre: String = "";
