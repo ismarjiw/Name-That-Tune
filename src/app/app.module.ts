@@ -7,11 +7,13 @@ import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { GameComponent } from './game/game.component';
+import { FAQComponent } from "./faq/faq.component";
 
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "game", component: GameComponent }
+  { path: "game", component: GameComponent },
+  { path: "faq", component: FAQComponent }
 ];
 
 @NgModule({
