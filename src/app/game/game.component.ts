@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
+import { SpotifyService } from 'src/services/spotify.service';
 
 @Component({
     selector: 'app-game',
@@ -10,8 +11,10 @@ export class GameComponent implements OnInit {
 
     attribute = FormData;
     gameStarted = false;
+    tracks: any[] = [];
 
-    constructor(private localSt: LocalStorageService) {
+    constructor(private localSt: LocalStorageService, private spotifyService: SpotifyService) {
+        this.tracks = this.spotifyService.allTracks;
     }
 
     ngOnInit(): void {
@@ -33,9 +36,18 @@ export class GameComponent implements OnInit {
         console.log('Received form data:', this.attribute);
     }
 
-    startGame() {
+    startGame(selectedGenre: String) {
         this.gameStarted = true;
-        console.log('Game started!')
-    }
-
+        this.spotifyService.fetchPlaylistByGenre(selectedGenre)
+          .subscribe((firstPlaylist) => {
+            if (firstPlaylist) {
+              this.spotifyService.fetchTracksByPlaylistId(firstPlaylist.id)
+                .subscribe((tracks) => {
+                  this.tracks = tracks;
+                });
+            } else {
+              console.log('error fetching tracks or empty playlist')
+            }
+          });
+      }
 }

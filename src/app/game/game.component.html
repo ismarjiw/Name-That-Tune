@@ -1,6 +1,20 @@
 <div *ngIf="!gameStarted">
     <app-configuration (formSubmitted)="handleFormData($event)"></app-configuration>
 </div>
-<div *ngIf="gameStarted">
+<div *ngIf="gameStarted && tracks.length > 0">
     <p>Game started!</p>
+
+<!-- rendering tracks as a placeholder -->
+    <div *ngFor="let track of tracks">
+        <p>{{ track.track.name }}</p>
+        <p>{{ track.track.artists[0].name }}</p>
+        <audio controls>
+            <source [src]="track.track.preview_url" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+</div>
+
+<div *ngIf="gameStarted && tracks.length === 0">
+    <p>Loading tracks...</p>
 </div>
