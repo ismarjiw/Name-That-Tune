@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AUTH_ENDPOINT, TOKEN_KEY} from '../home/home.component';
 import fetchFromSpotify, {request} from 'src/services/api';
+import { ButtonComponent } from '../components/button/button.component';
 
 @Component({
     selector: 'app-configuration',
@@ -142,5 +143,9 @@ export class ConfigurationComponent implements OnInit {
             // Return null or handle the case when no playlists are available
             return null;
         }
+    }
+
+    saveGameConfigOnGameStart() {
+      console.log("Save config options to local storage and start game with those preset configurations")
     }
 }

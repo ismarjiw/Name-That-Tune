@@ -1,37 +1,52 @@
 <div *ngIf="authLoading || configLoading">Loading...</div>
 
-<div *ngIf="!authLoading && !configLoading">
-    <div class="difficulty-content">
-        <h2>Difficulty:</h2>
-        <button>Easy</button>
-        <button>Medium</button>
-        <button>Hard</button>
+<div class="parent-container">
+<div class="config-content" *ngIf="!authLoading && !configLoading">
+
+    <section class="player-name">PLAYER:<input type="text" placeholder="ENTER NAME"/></section>
+
+    <div class="config-options">
+        <div class="difficulty-content">
+                <h2>DIFFICULTY:</h2>
+                <div class="config-btns">
+                    <app-button class="first-btn">EASY</app-button>
+                    <app-button class="second-btn">MEDIUM</app-button>
+                    <app-button class="third-btn">HARD</app-button>
+                </div>
+            </div>
+
+            <div class="rounds-content">
+                <h2>ROUNDS:</h2>
+                <div class="config-btns">
+                    <app-button class="first-btn">5</app-button>
+                    <app-button class="second-btn">10</app-button>
+                    <app-button class="third-btn">15</app-button>
+                </div>
+                
+            </div>
+
+            <div class="genres-content">
+                <h2>GENRES:</h2>
+                <select (ngModelChange)="setGenre($event)" [(ngModel)]="selectedGenre">
+                    <option value="" disabled selected>SELECT</option>
+                    <option *ngFor="let genre of genres" [value]="genre">
+                        {{ genre }}
+                    </option>
+                </select>
+            </div>
     </div>
 
-    <div class="rounds-content">
-        <h2>Rounds:</h2>
-        <button>5</button>
-        <button>10</button>
-        <button>15</button>
-    </div>
+    <section class="start-btn"><app-button (click)="saveGameConfigOnGameStart()">START</app-button></section>
 
-    <div class="genres-content">
-        <h2>Genre:</h2>
-        <select (ngModelChange)="setGenre($event)" [(ngModel)]="selectedGenre">
-            <option [value]=""></option>
-            <option *ngFor="let genre of genres" [value]="genre">
-                {{ genre }}
-            </option>
-        </select>
-    </div>
-
-    <div *ngFor="let track of tracks">
+    <!-- <div *ngFor="let track of tracks">
         <p>{{ track.track.name }}</p>
         <p>{{ track.track.artists[0].name }}</p>
         <audio controls>
             <source [src]="track.track.preview_url" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-    </div>
+    </div> -->
+
+</div>
 
 </div>

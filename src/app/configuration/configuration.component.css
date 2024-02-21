@@ -1,0 +1,106 @@
+.parent-container {
+    display: flex;
+    justify-content: center;
+}
+
+.config-content{
+    font-family: var(--main-font-family);
+    font-weight: 400;
+    font-style: normal;
+    color: var(--text-color);
+    border: solid;
+    border-color: var(--main-font-family);
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    padding-top: 5rem;
+    padding-bottom: 8rem;
+    margin-top: 4rem;
+    width: 80rem;
+}
+
+.config-options, .player-name, .start-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.config-options {
+    gap: 2rem;
+}
+
+.player-name {
+    margin-bottom: 5rem;
+}
+
+.start-btn {
+    margin-top: 5rem;
+}
+
+.config-btns {
+    display: flex;
+    flex-direction: column;
+}
+
+.difficulty-content {
+    border: solid;
+    border-color: var(--config-bg-color);
+    border-radius: 1rem;
+    background-color: var(--config-bg-color);
+    text-align: center;
+    padding: 1rem;
+}
+
+.rounds-content {
+    border: solid;
+    border-color: var(--config-bg-color);
+    border-radius: 1rem;
+    background-color: var(--config-bg-color);
+    text-align: center;
+    padding: 1rem;
+}
+
+.genres-content {
+    border: solid;
+    border-color: var(--config-bg-color);
+    border-radius: 1rem;
+    background-color: var(--config-bg-color);
+    text-align: center;
+    padding: 1rem;
+}
+
+.first-btn{
+    background-color: var(--config-bg-color);
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.second-btn{
+    background-color: var(--config-bg-color);
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.third-btn{
+    background-color: var(--config-bg-color);
+    color: var(--text-color);
+    
+}
+
+input {
+    font-family: var(--main-font-family);
+    border: none;
+    background-color: var(--text-color);
+    border-radius: 1rem;
+    color: var(--config-bg-color);
+    padding-left: 1rem;
+}
+
+select {
+    font-family: var(--main-font-family);
+    border: none;
+    background-color: var(--text-color);
+    border-radius: 0.5rem;
+    color: var(--config-bg-color);
+    padding: 1rem;
+    text-align: center;
+}
+
