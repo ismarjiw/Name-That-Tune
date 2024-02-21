@@ -1,0 +1,46 @@
+.faq-content {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    padding-top: 2rem;
+}
+
+.question-container {
+    display: flex;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    border: solid;
+    border-color: #09E85E;
+    border-radius: 1rem;
+    background-color: #214F4B;
+    color: white;
+    margin-bottom: 1rem;
+    width: 60rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out; 
+
+    &:hover {
+        transform: scale(1.01) translateY(-5px); 
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+    }
+}
+
+.questions-container {
+    margin-left: 28rem;
+}
+
+.answer {
+    width: 58rem;
+    margin-left: 2rem;
+}
+
+svg {
+    margin-top: 0.8rem;
+    margin-right: 1rem;
+}
+
+h1 {
+    color: #214F4B;
+    margin-left: 55rem;
+}
