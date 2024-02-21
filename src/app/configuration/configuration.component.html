@@ -17,10 +17,10 @@
 
     <div class="genres-content">
         <h2>Genre:</h2>
-        <select [(ngModel)]="selectedGenre" (ngModelChange)="setGenre($event)">
+        <select (ngModelChange)="setGenre($event)" [(ngModel)]="selectedGenre">
             <option [value]=""></option>
-            <option [value]="genre" *ngFor="let genre of genres">
-            {{ genre }}
+            <option *ngFor="let genre of genres" [value]="genre">
+                {{ genre }}
             </option>
         </select>
     </div>

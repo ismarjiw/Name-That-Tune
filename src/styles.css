@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-color: #214F4B;
+    --success-color: #16C172;
+    --action-color: #09E85E;
+    --secondary-bg-color: #2AFC98;
+    --accent-color: #2DE1FC;
+    --form-bg-color: #2AFC98;
+    --footer-bg-color: #214F4B;
+    --text-color: #FFFFFF;
+    --main-font-family: 'Press Start 2P', system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .navbar-container {
+        background: #212121FF;
+    }
+
+    body {
+        background-color: #212121;
+        color: #ffffff;
+    }
+
+    .user-profile {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}

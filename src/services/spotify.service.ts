@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import fetchFromSpotify from 'src/services/api';
+import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SpotifyService {
 
-  constructor() { }
+    constructor() {
+    }
 
 }

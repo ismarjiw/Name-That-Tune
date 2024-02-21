@@ -1,4 +1,4 @@
-import { toPairs } from "lodash";
+import {toPairs} from "lodash";
 import "whatwg-fetch";
 
 const SPOTIFY_ROOT = "https://api.spotify.com/v1";
@@ -11,10 +11,10 @@ const SPOTIFY_ROOT = "https://api.spotify.com/v1";
  * @return {object}          The parsed JSON from the request
  */
 const parseJSON = (response: any) => {
-  if (response.status === 204 || response.status === 205) {
-    return null;
-  }
-  return response.json();
+    if (response.status === 204 || response.status === 205) {
+        return null;
+    }
+    return response.json();
 };
 
 /**
@@ -26,12 +26,12 @@ const parseJSON = (response: any) => {
  */
 
 const checkStatus = (response: any) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  }
-  const error: any = new Error(response.statusText);
-  error.response = response;
-  throw error;
+    if (response.status >= 200 && response.status < 300) {
+        return response;
+    }
+    const error: any = new Error(response.statusText);
+    error.response = response;
+    throw error;
 };
 
 /**
@@ -43,20 +43,20 @@ const checkStatus = (response: any) => {
  * @return {object}           The response data
  */
 export const request = (url: any, options?: any) => {
-  // eslint-disable-next-line no-undef
-  return fetch(url, options).then(checkStatus).then(parseJSON);
+    // eslint-disable-next-line no-undef
+    return fetch(url, options).then(checkStatus).then(parseJSON);
 };
 
-const fetchFromSpotify = ({ token, endpoint, params }: any) => {
-  let url = [SPOTIFY_ROOT, endpoint].join("/");
-  if (params) {
-    const paramString = toPairs(params)
-      .map((param: any) => param.join("="))
-      .join("&");
-    url += `?${paramString}`;
-  }
-  const options = { headers: { Authorization: `Bearer ${token}` } };
-  return request(url, options);
+const fetchFromSpotify = ({token, endpoint, params}: any) => {
+    let url = [SPOTIFY_ROOT, endpoint].join("/");
+    if (params) {
+        const paramString = toPairs(params)
+            .map((param: any) => param.join("="))
+            .join("&");
+        url += `?${paramString}`;
+    }
+    const options = {headers: {Authorization: `Bearer ${token}`}};
+    return request(url, options);
 };
 
 export default fetchFromSpotify;

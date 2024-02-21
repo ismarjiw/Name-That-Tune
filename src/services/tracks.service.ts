@@ -1,8 +1,7 @@
-import { Injectable, signal } from '@angular/core';
-import { ConfigurationComponent } from 'src/app/configuration/configuration.component';
+import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class TracksService {
 
