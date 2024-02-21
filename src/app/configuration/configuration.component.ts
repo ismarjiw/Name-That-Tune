@@ -16,12 +16,8 @@ export class ConfigurationComponent implements OnInit {
     selectedGenre: String = "";
     authLoading: boolean = false;
     configLoading: boolean = false;
-    // token: String = "";
-    // categoryId: String = '';
-    // genreCategoryMapping: { [genre: string]: string } = {};
     firstPlaylist: any;
     firstPlaylistId: String = '';
-    // tracks: any[] = [];
 
     constructor(private spotifyService: SpotifyService) {}
 
