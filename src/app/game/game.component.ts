@@ -9,8 +9,6 @@ export class GameComponent implements OnInit {
 
   constructor() { }
 
-  allTracks: any[] = [];
-
   ngOnInit(): void {
     
   }

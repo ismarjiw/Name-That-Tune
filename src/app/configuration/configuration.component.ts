@@ -22,7 +22,7 @@ export class ConfigurationComponent implements OnInit {
 
   firstPlaylist: any;
   firstPlaylistId: String = '';
-  public tracks: any[] = [];
+  tracks: any[] = [];
 
   async ngOnInit(): Promise<void> {
     this.authLoading = true;
