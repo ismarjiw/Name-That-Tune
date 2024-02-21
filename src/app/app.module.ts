@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {AppComponent} from "./app.component";
 import {HomeComponent} from "./home/home.component";
@@ -28,7 +28,8 @@ import { NgxWebstorageModule } from "ngx-webstorage";
         AppRoutingModule,
         FAQComponent,
         ButtonComponent,
-        NgxWebstorageModule.forRoot()
+        NgxWebstorageModule.forRoot(),
+        ReactiveFormsModule
     ],
     providers: [],
     bootstrap: [AppComponent],

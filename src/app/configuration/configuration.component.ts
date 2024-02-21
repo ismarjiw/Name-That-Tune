@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TOKEN_KEY } from '../home/home.component';
 import { of } from 'rxjs';
 import { catchError, mergeMap, tap } from 'rxjs/operators';
 
 import { SpotifyService } from '../../services/spotify.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-configuration',
@@ -19,7 +20,12 @@ export class ConfigurationComponent implements OnInit {
     firstPlaylist: any;
     firstPlaylistId: String = '';
 
-    constructor(private spotifyService: SpotifyService) {}
+    gameForm: FormGroup;
+    @Output() formSubmitted = new EventEmitter<any>();
+
+    constructor(private spotifyService: SpotifyService, private fb: FormBuilder) {
+      this.gameForm = this.fb.group({});
+    }
 
     ngOnInit(): void {
       this.authLoading = true;
@@ -55,6 +61,21 @@ export class ConfigurationComponent implements OnInit {
           .subscribe((genres) => {
             this.genres = genres || [];
           });
+
+          this.gameForm = this.fb.group({
+            playerName: ['', Validators.required],
+            difficulty: ['', Validators.required],
+            rounds: ['', [Validators.required, Validators.min(5)]],
+            genre: ['', Validators.required]
+          });
+  }
+
+  setDifficulty(difficulty: string) {
+    this.gameForm.patchValue({ difficulty });
+  }
+
+  setRounds(rounds: number) {
+    this.gameForm.patchValue({ rounds });
   }
 
   setGenre(selectedGenre: string) {
@@ -75,7 +96,8 @@ export class ConfigurationComponent implements OnInit {
         });
 }
 
-    saveGameConfigOnGameStart() {
-      console.log("Save config options to local storage and start game with those preset configurations")
+    onSubmit() {
+      const formData = this.gameForm.value;
+      this.formSubmitted.emit(formData);
     }
 }

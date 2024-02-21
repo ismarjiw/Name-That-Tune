@@ -3,4 +3,4 @@
 <section><button (click)="saveValue()">Save</button></section>
 <section><button (click)="clearValue()">Clear</button></section> -->
 
-<app-configuration></app-configuration>
+<app-configuration (formSubmitted)="handleFormData($event)"></app-configuration>

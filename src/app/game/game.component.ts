@@ -8,7 +8,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 })
 export class GameComponent implements OnInit {
 
-    attribute = 'i love to code'
+    attribute = FormData;
 
     constructor(private localSt: LocalStorageService) {
     }
@@ -18,11 +18,19 @@ export class GameComponent implements OnInit {
     }
 
     saveValue() {
-        this.localSt.store('randomMessage', this.attribute)
+        this.localSt.store('gameConfig', this.attribute)
+        console.log('Saved form data to local storage');
     }
 
     clearValue() {
         this.localSt.clear('randomMessage')
     }
+
+    handleFormData(formData: any) {
+        this.attribute = formData; 
+        this.saveValue();
+        console.log('Received form data:', this.attribute);
+    }
+    
 
 }
