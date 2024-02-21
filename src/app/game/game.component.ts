@@ -9,6 +9,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 export class GameComponent implements OnInit {
 
     attribute = FormData;
+    gameStarted = false;
 
     constructor(private localSt: LocalStorageService) {
     }
@@ -31,6 +32,10 @@ export class GameComponent implements OnInit {
         this.saveValue();
         console.log('Received form data:', this.attribute);
     }
-    
+
+    startGame() {
+        this.gameStarted = true;
+        console.log('Game started!')
+    }
 
 }

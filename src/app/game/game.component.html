@@ -1,6 +1,6 @@
-<!-- to test localstorage functionality  -->
-<!-- <section><input type="text" [(ngModel)]="attribute"/></section>
-<section><button (click)="saveValue()">Save</button></section>
-<section><button (click)="clearValue()">Clear</button></section> -->
-
-<app-configuration (formSubmitted)="handleFormData($event)"></app-configuration>
+<div *ngIf="!gameStarted">
+    <app-configuration (formSubmitted)="handleFormData($event)"></app-configuration>
+</div>
+<div *ngIf="gameStarted">
+    <p>Game started!</p>
+</div>

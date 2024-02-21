@@ -5,6 +5,7 @@ import { catchError, mergeMap, tap } from 'rxjs/operators';
 
 import { SpotifyService } from '../../services/spotify.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GameComponent } from '../game/game.component';
 
 @Component({
     selector: 'app-configuration',
@@ -23,7 +24,7 @@ export class ConfigurationComponent implements OnInit {
     gameForm: FormGroup;
     @Output() formSubmitted = new EventEmitter<any>();
 
-    constructor(private spotifyService: SpotifyService, private fb: FormBuilder) {
+    constructor(private spotifyService: SpotifyService, private fb: FormBuilder, private gameComponent: GameComponent) {
       this.gameForm = this.fb.group({});
     }
 
@@ -80,9 +81,10 @@ export class ConfigurationComponent implements OnInit {
 
   setGenre(selectedGenre: string) {
     this.selectedGenre = selectedGenre;
-    console.log('Selected genre:', this.selectedGenre);
-
-    this.spotifyService
+    
+    if (selectedGenre) {
+      console.log('Selected genre:', this.selectedGenre);
+      this.spotifyService
         .fetchPlaylistByGenre(selectedGenre)
         .subscribe((firstPlaylist) => {
             if (firstPlaylist) {
@@ -94,10 +96,13 @@ export class ConfigurationComponent implements OnInit {
                 console.error('Failed to fetch playlist for genre:', selectedGenre);
             }
         });
-}
+    }
+    }
 
     onSubmit() {
       const formData = this.gameForm.value;
       this.formSubmitted.emit(formData);
+      // this.gameComponent.startGame();
+      // need to figure out a way to start the game without jumping to the game component early
     }
 }
