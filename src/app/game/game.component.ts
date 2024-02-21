@@ -23,7 +23,7 @@ export class GameComponent implements OnInit {
     }
 
     clearValue() {
-        this.localSt.clear('randomMessage')
+        this.localSt.clear('gameConfig')
     }
 
     handleFormData(formData: any) {
