@@ -16,7 +16,19 @@
     padding-bottom: 8rem;
     margin-top: 4rem;
     width: 80rem;
+    animation: bounce 1s ease-in-out infinite; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+  
 
 .config-options, .player-name, .start-btn {
     display: flex;
@@ -29,6 +41,7 @@
 
 .player-name {
     margin-bottom: 5rem;
+    font-size: 1.5rem;
 }
 
 .start-btn {
@@ -65,6 +78,15 @@
     background-color: var(--config-bg-color);
     text-align: center;
     padding: 1rem;
+}
+
+.difficulty-content, .rounds-content, .genres-content {
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.01) translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 }
 
 .first-btn {
@@ -110,4 +132,11 @@ select {
     color: var(--config-bg-color);
     padding: 1rem;
     text-align: center;
+
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.01) translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 }

@@ -19,7 +19,19 @@
     margin-top: 4rem;
     width: 80rem;
     margin-left: 18rem;
+
+    animation: bounce 1s ease-in-out infinite; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
 
 .audio-element {
     text-align: center;
