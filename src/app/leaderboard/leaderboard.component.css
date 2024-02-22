@@ -1,11 +1,22 @@
+
+
 .leaderboard {
     margin-top: 4rem;
     font-family: var(--main-font-family);
-}
+    animation: fadeIn 2s ease-in-out;
+    display: flex;
+    justify-content: center;
+  }
+  
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
 table {
     border-collapse: collapse;
-    width: 100%;
+    width: 90%;
     color: var(--text-color);
     border-radius: 10px;
     overflow: hidden;
@@ -23,8 +34,20 @@ td, th {
 
 tr:nth-child(even) {
     background-color: var(--primary-color);
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.01) translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 }
 
 tr:nth-child(odd) {
     background-color: var(--primary-color);
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.00) translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 }

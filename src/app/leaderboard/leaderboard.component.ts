@@ -25,8 +25,22 @@ export class LeaderboardComponent implements OnInit {
           return gameData;
         });
 
-        // Sort leaderboardData by score in descending order
-        this.leaderboardData.sort((a, b) => b.score - a.score); 
+     // Sort leaderboardData by difficulty (descending), score (descending), then time (ascending)
+  this.leaderboardData.sort((a, b) => {
+    // Compare difficulties 
+    const difficulties = ['hard', 'medium', 'easy'];
+    const aIndex = difficulties.indexOf(a.difficulty);
+    const bIndex = difficulties.indexOf(b.difficulty);
+    if (aIndex !== bIndex) {
+      return aIndex - bIndex; // Lower index (higher difficulty) comes first
+    }
+    // If difficulties are the same, compare scores (descending)
+    if (a.score !== b.score) {
+      return b.score - a.score;
+    }
+    // If difficulties and scores are the same, compare times (ascending)
+    return a.time - b.time; // Ascending order for faster time
+  });
       }
 
 }
