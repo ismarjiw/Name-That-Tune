@@ -30,6 +30,7 @@ thead {
 td, th {
     padding: 8px;
     border: 1px solid var(--secondary-bg-color);
+    font-size: 1.5em;
 }
 
 tr:nth-child(even) {

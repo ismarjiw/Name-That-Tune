@@ -42,6 +42,11 @@ h1, h2 {
     background-size: 400% 400%;
     animation: gradient 12s ease infinite; 
   }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
   
   @keyframes gradient {
     0% {
@@ -85,6 +90,7 @@ h1, h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    animation: fadeIn 3s ease-in-out;
 }
 
 .github-link img {
@@ -153,3 +159,4 @@ h1, h2 {
         height: 10%;
     }
 }
+
