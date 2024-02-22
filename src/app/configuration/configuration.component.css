@@ -85,6 +85,14 @@
     
 }
 
+.loading {
+    font-family: var(--main-font-family);
+    font-weight: 400;
+    font-style: normal;
+    text-align: center;
+    margin-top: 10rem;
+}
+
 input {
     font-family: var(--main-font-family);
     border: none;

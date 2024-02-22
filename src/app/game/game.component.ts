@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { SpotifyService } from 'src/services/spotify.service';
+import { ButtonComponent } from '../components/button/button.component';
 
 @Component({
     selector: 'app-game',
@@ -11,6 +12,7 @@ export class GameComponent implements OnInit {
 
     attribute = FormData;
     gameStarted = false;
+    // gameStarted = true; // for working with the game content without tracks saved
     tracks: any[] = [];
 
     constructor(private localSt: LocalStorageService, private spotifyService: SpotifyService) {

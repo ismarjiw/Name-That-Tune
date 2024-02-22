@@ -1,22 +1,28 @@
 <div class="content-wrapper">
-    <section id="welcome">
-        <h1>Welcome to <br><br> Name That Tune</h1>
-        <div class="buttons">
-            <app-button [routerLink]="'/game'">Play</app-button>
-            <app-button [scrollTarget]="rules">Rules</app-button>
-        </div>
-    </section>
-    <section #rules id="rules">
-        <h2>Rules</h2>
-        <p #rulesText class="typewriter-text"></p>
-        <app-button *ngIf="showGameButton" [routerLink]="'/game'">Play</app-button>
-    </section>
+  <section id="welcome">
+    <h1>
+      Welcome to <br /><br />
+      Name That Tune
+    </h1>
+    <div class="buttons">
+      <app-button [routerLink]="'/game'">Play</app-button>
+      <app-button [scrollTarget]="rules">Rules</app-button>
+    </div>
+  </section>
+  <section #rules id="rules">
+    <h2>Rules</h2>
+    <p #rulesText class="typewriter-text"></p>
+    <app-button *ngIf="showGameButton" [routerLink]="'/game'">Play</app-button>
+  </section>
 </div>
 <footer>
-    <a class="github-link" href="https://github.com/fasttrackd-student-work/angular-whos-who-jan-2024-team-2"
-       target="_blank">
-        <img alt="GitHub" src="assets/icon-github-outline.png">
-    </a>
-    <p>Copyright © Ismarji & Nick. All rights reserved.</p>
+  <a
+    class="github-link"
+    href="https://github.com/fasttrackd-student-work/angular-whos-who-jan-2024-team-2"
+    target="_blank"
+  >
+    <img alt="GitHub" src="assets/icon-github-outline.png" />
+  </a>
+  <p>Copyright © Ismarji & Nick. All rights reserved.</p>
 </footer>
 <script src="scripts/home-script.js"></script>
