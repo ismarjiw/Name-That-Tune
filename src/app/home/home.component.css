@@ -90,7 +90,7 @@ h1, h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    animation: fadeIn 3s ease-in-out;
+    animation: fadeIn 2s ease-in-out;
 }
 
 .github-link img {
