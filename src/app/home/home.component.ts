@@ -70,4 +70,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
             }
         }, this.typingSpeed);
     }
+
+    scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
