@@ -1,6 +1,12 @@
 .parent-container {
     display: flex;
     justify-content: center;
+    animation: fadeIn 3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .config-content {
@@ -53,34 +59,13 @@
     flex-direction: column;
 }
 
-.difficulty-content {
-    border: solid;
-    border-color: var(--config-bg-color);
-    border-radius: 1rem;
-    background-color: var(--config-bg-color);
-    text-align: center;
-    padding: 1rem;
-}
-
-.rounds-content {
-    border: solid;
-    border-color: var(--config-bg-color);
-    border-radius: 1rem;
-    background-color: var(--config-bg-color);
-    text-align: center;
-    padding: 1rem;
-}
-
-.genres-content {
-    border: solid;
-    border-color: var(--config-bg-color);
-    border-radius: 1rem;
-    background-color: var(--config-bg-color);
-    text-align: center;
-    padding: 1rem;
-}
-
 .difficulty-content, .rounds-content, .genres-content {
+    border: solid;
+    border-color: var(--form-bg-color);
+    border-radius: 1rem;
+    background-color: var(--config-bg-color);
+    text-align: center;
+    padding: 1rem;
     transition: transform 0.2s ease-in-out;
 
     &:hover {

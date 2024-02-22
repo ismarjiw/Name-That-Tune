@@ -28,6 +28,7 @@ export class GameComponent implements OnInit {
     finalScore: number = 0; // Will hold the final score after the game ends
     gameOver: boolean = false; // Will be set to true when the game ends
     loading: boolean = false; // Will be set to true when the game starts
+    showBars: boolean = false;
 
     constructor(
         private spotifyService: SpotifyService,
@@ -130,6 +131,7 @@ export class GameComponent implements OnInit {
         console.log('Playing track:', this.currentTrack.name);
         if (this.audioPlayer && this.audioPlayer.nativeElement) {
             this.audioPlayer.nativeElement.play();
+            this.showBars = true;
         }
     }
 
@@ -137,6 +139,7 @@ export class GameComponent implements OnInit {
         console.log('Pausing track:', this.currentTrack.name);
         if (this.audioPlayer && this.audioPlayer.nativeElement) {
             this.audioPlayer.nativeElement.pause();
+            this.showBars = false;
         }
     }
 

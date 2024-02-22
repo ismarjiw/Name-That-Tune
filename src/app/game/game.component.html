@@ -1,31 +1,56 @@
-<app-configuration (formSubmitted)="handleFormSubmitted($event)" *ngIf="!gameStarted"></app-configuration>
+<app-configuration
+  (formSubmitted)="handleFormSubmitted($event)"
+  *ngIf="!gameStarted"
+></app-configuration>
 <!-- Game container -->
-<div *ngIf="gameStarted && !loading" class="game-container">
+<div class="parent-container">
+  <div *ngIf="gameStarted && !loading" class="game-container">
     <div *ngIf="loading" class="loading">Loading...</div>
     <!-- Timer -->
     <div class="timer">Time: {{ gameTime }} seconds</div>
     <!-- Music player -->
     <section *ngIf="currentTrack && !gameOver" class="audio-element">
-        <audio #audioPlayer *ngIf="currentTrack" [src]="currentTrack.preview_url" controls type="audio/mpeg"></audio>
+      <audio
+        #audioPlayer
+        *ngIf="currentTrack"
+        [src]="currentTrack.preview_url"
+        controls
+        type="audio/mpeg"
+      ></audio>
     </section>
+    <div *ngIf="showBars" class="bars">
+      <div class="bars__item"></div>
+      <div class="bars__item"></div>
+      <div class="bars__item"></div>
+      <div class="bars__item"></div>
+    </div>
     <!-- Questions and answers -->
     <div *ngIf="!gameOver" class="game-content">
-        <div class="mc-btns">
-            <!-- Generate buttons based on the choices for the current track -->
-            <button (click)="selectAnswer(choice)"
-                    *ngFor="let choice of currentChoices"
-                    [disabled]="!roundStarted">
-                {{ choice }}
-            </button>
-        </div>
+      <div class="mc-btns">
+        <!-- Generate buttons based on the choices for the current track -->
+        <button
+          (click)="selectAnswer(choice)"
+          *ngFor="let choice of currentChoices"
+          [disabled]="!roundStarted"
+        >
+          {{ choice }}
+        </button>
+      </div>
     </div>
     <!-- Begin button -->
-    <button (click)="beginRound()" *ngIf="!roundStarted && !gameOver" class="start-btn">Begin</button>
+    <button
+      (click)="beginRound()"
+      *ngIf="!roundStarted && !gameOver"
+      class="start-btn"
+    >
+      Begin
+    </button>
     <!-- Results and navigation to leaderboard -->
     <div *ngIf="gameOver">
-        <!-- Display results -->
-        <p>Your score: {{ finalScore }}</p>
-        <!-- Button to leaderboard -->
-        <app-button [routerLink]="'/leaderboard'">Leaderboard</app-button>
+      <!-- Display results -->
+      <p>Your score: {{ finalScore }}</p>
+      <!-- Button to leaderboard -->
+      <app-button [routerLink]="'/leaderboard'">Leaderboard</app-button>
     </div>
+  </div>
 </div>
