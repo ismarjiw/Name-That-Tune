@@ -1,9 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {SpotifyService} from 'src/services/spotify.service';
-import {LocalStorageService} from 'ngx-webstorage';
 import {Router} from '@angular/router';
 import {EMPTY, Subscription, switchMap} from "rxjs";
 import {tap} from "rxjs/operators";
+
+import {LocalStorageService} from 'ngx-webstorage';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Component({
@@ -38,8 +40,10 @@ export class GameComponent implements OnInit {
         this.gameTime = 0;
     }
 
-    initializeGame(): void {
-        const configString = this.localSt.retrieve('gameConfig');
+    initializeGame(gameId: string): void {
+        const gameConfigKey = `gameConfig-${gameId}`;
+        const configString = this.localSt.retrieve(gameConfigKey);
+
         if (configString) {
             this.gameConfig = configString;
             this.fetchFirstPlaylist(this.gameConfig.genre);
@@ -207,58 +211,17 @@ export class GameComponent implements OnInit {
             score: this.finalScore,
             time: this.gameTime
         };
-        this.localSt.store('gameData', gameData);
+        const gameDataId = uuidv4();
+        const gameDataKey = `gameData-${gameDataId}`;
+        this.localSt.store(gameDataKey, gameData);
     }
 
-    handleFormSubmitted(config: any) {
+    handleFormSubmitted(event: { gameId: string; config: any }) {
+        const { gameId, config } = event;
         this.gameConfig = config;
         this.loading = true;
         this.gameStarted = true;
-        this.initializeGame();
+        this.initializeGame(gameId);
     }
 }
 
-/*
-    attribute = FormData;
-    gameStarted = false;
-    // gameStarted = true; // for working with the game content without tracks saved
-    tracks: any[] = [];
-
-    constructor(private localSt: LocalStorageService, private spotifyService: SpotifyService) {
-        this.tracks = this.spotifyService.allTracks;
-    }
-
-    ngOnInit(): void {
-        this.localSt.observe('key').subscribe((value) => console.log('new value', value))
-    }
-
-    saveValue() {
-        this.localSt.store('gameConfig', this.attribute)
-        console.log('Saved form data to local storage');
-    }
-
-    clearValue() {
-        this.localSt.clear('gameConfig')
-    }
-
-    handleFormData(formData: any) {
-        this.attribute = formData;
-        this.saveValue();
-        console.log('Received form data:', this.attribute);
-    }
-
-    startGame(selectedGenre: String) {
-        this.gameStarted = true;
-        this.spotifyService.fetchPlaylistByGenre(selectedGenre)
-          .subscribe((firstPlaylist) => {
-            if (firstPlaylist) {
-              this.spotifyService.fetchTracksByPlaylistId(firstPlaylist.id)
-                .subscribe((tracks) => {
-                  this.tracks = tracks;
-                });
-            } else {
-              console.log('error fetching tracks or empty playlist')
-            }
-          });
-      }
-      */

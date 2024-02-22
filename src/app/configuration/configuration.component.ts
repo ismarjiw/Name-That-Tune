@@ -8,7 +8,8 @@ import {LocalStorageService} from 'ngx-webstorage';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-// import { GameComponent } from '../game/game.component';
+import { v4 as uuidv4 } from 'uuid';
+
 
 @Component({
     selector: 'app-configuration',
@@ -109,32 +110,41 @@ export class ConfigurationComponent implements OnInit {
     }
 
     onSubmit() {
-        if (this.gameForm.valid && this.selectedGenre) {
-            // Create a game configuration object
-            const gameConfig = {
-                playerName: this.gameForm.value.playerName,
-                difficulty: this.gameForm.value.difficulty,
-                rounds: this.gameForm.value.rounds,
-                genre: this.selectedGenre,
-            };
-
-            // Save the game configuration to local storage
-            this.localSt.store('gameConfig', gameConfig);
-
-            // Emit an event to notify the parent component that the game should start
-            this.formSubmitted.emit();
-
+        const playerNameControl = this.gameForm.get('playerName');
+        const difficultyControl = this.gameForm.get('difficulty');
+        const roundsControl = this.gameForm.get('rounds');
+        const genreControl = this.gameForm.get('genre');
+      
+        if (
+          playerNameControl?.valid &&
+          playerNameControl.value &&
+          difficultyControl?.valid &&
+          difficultyControl.value &&
+          roundsControl?.valid &&
+          roundsControl.value &&
+          genreControl?.valid &&
+          genreControl.value &&
+          this.selectedGenre
+        ) {
+          // Create a unique identifier for the game
+          const gameId = uuidv4();
+      
+          // Create a game configuration object
+          const gameConfig = {
+            playerName: this.gameForm.value.playerName,
+            difficulty: this.gameForm.value.difficulty,
+            rounds: this.gameForm.value.rounds,
+            genre: this.selectedGenre,
+          };
+      
+          // Save the game configuration to local storage
+          const gameConfigKey = `gameConfig-${gameId}`;
+          this.localSt.store(gameConfigKey, gameConfig);
+      
+          // Emit an event to notify the parent component that the game should start
+          this.formSubmitted.emit({ gameId, gameConfig });
         } else {
-            console.error('Form is not valid or genre not selected:', this.gameForm.value);
+          console.error('Form is not valid or genre not selected:', this.gameForm.value);
         }
-        // const formData = this.gameForm.value;
-        // this.formSubmitted.emit(formData);
-        //
-        // if (this.selectedGenre) {
-        //   this.gameComponent.startGame(this.selectedGenre); // Pass genre for track fetching
-        // } else {
-        //   console.error('Cannot start game without genre!');
-        // }
-        // need to figure out a way to prevent early submit events with reactive forms after a user selects difficulty or number of rounds
-    }
+      }
 }
