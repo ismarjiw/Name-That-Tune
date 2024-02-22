@@ -50,6 +50,7 @@
     <div *ngIf="gameOver">
       <!-- Display results -->
       <p>Your score: {{ finalScore }}</p>
+      <p class="check-score">See how you stack up by checking out the leaderboard page:</p>
       <!-- Button to leaderboard -->
       <app-button [routerLink]="'/leaderboard'">Leaderboard</app-button>
     </div>
