@@ -26,6 +26,7 @@
     </div>
     <!-- Questions and answers -->
     <div *ngIf="!gameOver" class="game-content">
+      <div *ngIf="isLoadingTracks" class="loading">Loading tracks...</div>
       <div class="mc-btns">
         <!-- Generate buttons based on the choices for the current track -->
         <button

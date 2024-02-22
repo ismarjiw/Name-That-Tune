@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
     gameOver: boolean = false; // Will be set to true when the game ends
     loading: boolean = false; // Will be set to true when the game starts
     showBars: boolean = false;
+    isLoadingTracks: boolean = true;
 
     constructor(
         private spotifyService: SpotifyService,
@@ -72,6 +73,7 @@ export class GameComponent implements OnInit {
                         this.tracks = tracks;
                         this.prepareRounds();
                         this.loadQuestion();
+                        this.isLoadingTracks = false;
                     } else {
                         // Handle the case where no tracks are found
                         console.error('No tracks found for playlist.');

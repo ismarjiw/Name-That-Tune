@@ -21,7 +21,11 @@ export class FAQComponent {
             answer: "To play 'Name That Tune', from the configuration screen you'll type your name, select how many rounds you want to play, set your difficulty (easy, medium, or hard), and what genre of music you would like to listen to.",
             showAnswer: false
         },
-        {question: "Where does the music play from?", answer: "From Spotify's API", showAnswer: false}
+        {
+            question: "Where does the music play from?", 
+            answer: "From Spotify's API", 
+            showAnswer: false
+        },
     ];
 
     toggleAnswer(question: FAQ) {
