@@ -7,48 +7,26 @@ import {Component, OnInit} from '@angular/core';
 })
 export class LeaderboardComponent implements OnInit {
 
-    leaderboardData = [
-        {
-            playerName: "Top Player",
-            score: 12345,
-            difficulty: "Hard",
-            rounds: 10,
-            genre: "Rock",
-        },
-        {
-            playerName: "Awesome Ace",
-            score: 10000,
-            difficulty: "Medium",
-            rounds: 8,
-            genre: "Pop",
-        },
-        {
-            playerName: "Newbie Ninja",
-            score: 8500,
-            difficulty: "Easy",
-            rounds: 5,
-            genre: "Classical",
-        },
-        {
-            playerName: "Quick Clicker",
-            score: 9800,
-            difficulty: "Medium",
-            rounds: 7,
-            genre: "Electronic",
-        },
-        {
-            playerName: "Chill Gamer",
-            score: 7200,
-            difficulty: "Easy",
-            rounds: 6,
-            genre: "Jazz",
-        },
-    ];
+    leaderboardData: any[] = [];
 
     constructor() {
     }
 
     ngOnInit(): void {
-    }
+        // Retrieve all keys from localStorage
+        const keys = Object.keys(localStorage);
+      
+        // Filter keys that start with 'gameData-'
+        const gameDataKeys = keys.filter(key => key.startsWith('ngx-webstorage|gamedata-'));
+      
+        // Retrieve gameData objects from localStorage and populate leaderboardData
+        this.leaderboardData = gameDataKeys.map(key => {
+          const gameData = JSON.parse(localStorage.getItem(key) || '{}');
+          return gameData;
+        });
+
+        // Sort leaderboardData by score in descending order
+        this.leaderboardData.sort((a, b) => b.score - a.score); 
+      }
 
 }
