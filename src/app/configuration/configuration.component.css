@@ -15,7 +15,7 @@
     font-style: normal;
     color: var(--text-color);
     border: solid;
-    border-color: var(--main-font-family);
+    border-color: var(--form-bg-color);
     border-radius: 1rem;
     background-color: var(--primary-color);
     padding-top: 5rem;
