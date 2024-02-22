@@ -3,7 +3,7 @@
     justify-content: center;
 }
 
-.config-content{
+.config-content {
     font-family: var(--main-font-family);
     font-weight: 400;
     font-style: normal;
@@ -67,22 +67,22 @@
     padding: 1rem;
 }
 
-.first-btn{
+.first-btn {
     background-color: var(--config-bg-color);
     color: var(--text-color);
     margin-bottom: 0.5rem;
 }
 
-.second-btn{
+.second-btn {
     background-color: var(--config-bg-color);
     color: var(--text-color);
     margin-bottom: 0.5rem;
 }
 
-.third-btn{
+.third-btn {
     background-color: var(--config-bg-color);
     color: var(--text-color);
-    
+
 }
 
 .loading {
@@ -111,4 +111,3 @@ select {
     padding: 1rem;
     text-align: center;
 }
-

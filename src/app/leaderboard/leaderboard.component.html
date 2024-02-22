@@ -1,26 +1,26 @@
 <div class="leaderboard">
-  <table>
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Player Name</th>
-        <th>Score</th>
-        <th>Difficulty</th>
-        <th>Rounds</th>
-        <th>Genre</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let entry of leaderboardData; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ entry.playerName }}</td>
-        <td>{{ entry.score }}</td>
-        <td>{{ entry.difficulty }}</td>
-        <td>{{ entry.rounds }}</td>
-        <td>{{ entry.genre }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <table>
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Player Name</th>
+            <th>Score</th>
+            <th>Difficulty</th>
+            <th>Rounds</th>
+            <th>Genre</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of leaderboardData; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ entry.playerName }}</td>
+            <td>{{ entry.score }}</td>
+            <td>{{ entry.difficulty }}</td>
+            <td>{{ entry.rounds }}</td>
+            <td>{{ entry.genre }}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
   

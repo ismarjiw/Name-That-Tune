@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import { LocalStorageService } from 'ngx-webstorage';
-import { SpotifyService } from 'src/services/spotify.service';
-import { ButtonComponent } from '../components/button/button.component';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {SpotifyService} from 'src/services/spotify.service';
+import {LocalStorageService} from 'ngx-webstorage';
+import {Router} from '@angular/router';
+import {EMPTY, Subscription, switchMap} from "rxjs";
+import {tap} from "rxjs/operators";
+
 
 @Component({
     selector: 'app-game',
@@ -9,7 +12,213 @@ import { ButtonComponent } from '../components/button/button.component';
     styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements OnInit {
+    @ViewChild('audioPlayer', {static: false}) audioPlayer: ElementRef | undefined;
+    gameConfig: any;
+    gameStarted: boolean = false;
+    tracks: any[] = [];
+    currentRound: number = 0;
+    rounds: any[] = [];
+    roundStarted: boolean = false;
+    gameTime: number = 0;
+    gameTimer: any;
+    currentTrack: any = null; // Will hold the current track object
+    currentChoices: string[] = []; // Will hold the choices for the current track
+    finalScore: number = 0; // Will hold the final score after the game ends
+    gameOver: boolean = false; // Will be set to true when the game ends
+    loading: boolean = false; // Will be set to true when the game starts
 
+    constructor(
+        private spotifyService: SpotifyService,
+        private localSt: LocalStorageService,
+        private router: Router
+    ) {
+    }
+
+    ngOnInit(): void {
+        this.gameTime = 0;
+    }
+
+    initializeGame(): void {
+        const configString = this.localSt.retrieve('gameConfig');
+        if (configString) {
+            this.gameConfig = configString;
+            this.fetchFirstPlaylist(this.gameConfig.genre);
+            this.loading = false;
+        } else {
+            console.error('Game configuration not found in local storage.');
+        }
+    }
+
+    fetchFirstPlaylist(genre: string): Subscription {
+        return this.spotifyService.fetchPlaylistByGenre(genre)
+            .pipe(
+                switchMap((firstPlaylist) => {
+                    if (!firstPlaylist) {
+                        // Handle the case where there is no playlist, e.g., throw an error or return EMPTY
+                        console.error('error fetching playlist or playlist is empty');
+                        return EMPTY; // EMPTY is an observable that completes immediately
+                    }
+                    // If we have a playlist, fetch its tracks
+                    return this.spotifyService.fetchTracksByPlaylistId(firstPlaylist.id);
+                }),
+                tap((tracks) => {
+                    if (tracks) {
+                        // If we have tracks, assign them and prepare for the game
+                        this.tracks = tracks;
+                        this.prepareRounds();
+                        this.loadQuestion();
+                    } else {
+                        // Handle the case where no tracks are found
+                        console.error('No tracks found for playlist.');
+                    }
+                })
+            )
+            .subscribe({
+                error: (err) => console.error('An error occurred while fetching playlist:', err)
+            });
+    }
+
+    prepareRounds(): void {
+        const tracksPerRound = Math.ceil(this.tracks.length / this.gameConfig.rounds);
+        for (let i = 0; i < this.gameConfig.rounds; i++) {
+            this.rounds.push(this.tracks.slice(i * tracksPerRound, (i + 1) * tracksPerRound));
+            console.log('Round:', i, this.rounds[i]);
+        }
+    }
+
+    loadQuestion(): void {
+        if (this.currentRound >= this.rounds.length) {
+            console.error(`No more rounds available.`);
+            return;
+        }
+        if (this.currentRound < 0 || this.currentRound >= this.rounds.length) {
+            console.error(`Invalid round index: ${this.currentRound}`);
+            return;
+        }
+        this.currentTrack = this.rounds[this.currentRound][0].track;
+        if (!this.currentTrack) {
+            console.error(`No track found for round: ${this.currentRound}`);
+            return;
+        }
+        this.currentChoices = this.generateChoices();
+        console.log('Current track:', this.currentTrack);
+        console.log('Choices:', this.currentChoices);
+    }
+
+    generateChoices(): string[] {
+        // Get a list of all track names
+        const allTrackNames = this.tracks.map(track => track.name);
+
+        // Shuffle the array and pick 3 random choices
+        let choices = this.shuffleArray(allTrackNames).slice(0, 3);
+
+        // Add the correct answer to the choices
+        choices.push(this.currentTrack.name);
+
+        // Shuffle again to mix the correct answer with the incorrect ones
+        choices = this.shuffleArray(choices);
+        console.log('Generated choices:', choices);
+
+        return choices;
+    }
+
+    playCurrentTrack(): void {
+        console.log('Playing track:', this.currentTrack.name);
+        if (this.audioPlayer && this.audioPlayer.nativeElement) {
+            this.audioPlayer.nativeElement.play();
+        }
+    }
+
+    pauseCurrentTrack(): void {
+        console.log('Pausing track:', this.currentTrack.name);
+        if (this.audioPlayer && this.audioPlayer.nativeElement) {
+            this.audioPlayer.nativeElement.pause();
+        }
+    }
+
+    shuffleArray(array: any[]): any[] {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
+        return array;
+    }
+
+    beginRound(): void {
+        if (!this.currentTrack) {
+            console.error('No current track set. Cannot begin round.');
+            return;
+        }
+        console.log('Begin round with track:', this.currentTrack.name);
+        this.roundStarted = true;
+        this.startGameTimer();
+        this.playCurrentTrack();
+    }
+
+    selectAnswer(trackName: string): void {
+        this.pauseCurrentTrack();
+        console.log('Selected Answer: ', trackName);
+        this.stopGameTimer();
+        this.roundStarted = false;
+        if (this.isAnswerCorrect(trackName)) {
+            this.finalScore += 250; // Increase score for correct answer
+        }
+        // Move to the next round after a slight delay
+        setTimeout(() => {
+            this.nextRound();
+        }, 1000);
+    }
+
+    isAnswerCorrect(answer: string): boolean {
+        console.log('isAnswerCorrect:', answer);
+        return answer === this.currentTrack.name;
+    }
+
+    nextRound(): void {
+        console.log('Next Round');
+        if (this.currentRound < this.gameConfig.rounds - 1) {
+            this.currentRound++;
+            this.loadQuestion();
+        } else {
+            this.endGame();
+        }
+    }
+
+    startGameTimer(): void {
+        this.gameTimer = setInterval(() => {
+            this.gameTime++;
+        }, 1000);
+    }
+
+    stopGameTimer(): void {
+        clearInterval(this.gameTimer);
+        this.gameTimer = null; // Clear the interval ID
+    }
+
+    endGame(): void {
+        this.stopGameTimer();
+        this.pauseCurrentTrack();
+        this.gameOver = true;
+        const gameData = {
+            playerName: this.gameConfig.playerName,
+            difficulty: this.gameConfig.difficulty,
+            rounds: this.gameConfig.rounds,
+            genre: this.gameConfig.genre,
+            score: this.finalScore,
+            time: this.gameTime
+        };
+        this.localSt.store('gameData', gameData);
+    }
+
+    handleFormSubmitted(config: any) {
+        this.gameConfig = config;
+        this.loading = true;
+        this.gameStarted = true;
+        this.initializeGame();
+    }
+}
+
+/*
     attribute = FormData;
     gameStarted = false;
     // gameStarted = true; // for working with the game content without tracks saved
@@ -33,7 +242,7 @@ export class GameComponent implements OnInit {
     }
 
     handleFormData(formData: any) {
-        this.attribute = formData; 
+        this.attribute = formData;
         this.saveValue();
         console.log('Received form data:', this.attribute);
     }
@@ -52,4 +261,4 @@ export class GameComponent implements OnInit {
             }
           });
       }
-}
+      */

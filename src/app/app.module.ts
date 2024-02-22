@@ -11,7 +11,7 @@ import {LeaderboardComponent} from './leaderboard/leaderboard.component';
 import {NavbarComponent} from "./components/navbar/navbar.component";
 import {AppRoutingModule} from './app-routing.module';
 import {ButtonComponent} from "./components/button/button.component";
-import { NgxWebstorageModule } from "ngx-webstorage";
+import {NgxWebstorageModule} from "ngx-webstorage";
 
 @NgModule({
     declarations: [

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, from } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
-import fetchFromSpotify, { request } from 'src/services/api';
-import { AUTH_ENDPOINT } from '../app/home/home.component'
+import {Injectable} from '@angular/core';
+import {from, Observable, of} from 'rxjs';
+import {catchError, map, mergeMap} from 'rxjs/operators';
+import fetchFromSpotify, {request} from 'src/services/api';
+import {AUTH_ENDPOINT} from '../app/home/home.component'
 
 @Injectable({
     providedIn: 'root'
@@ -13,11 +13,24 @@ export class SpotifyService {
     private tracks: any[] = [];
     private genreCategoryMapping: { [genre: string]: string } = {};
 
-    constructor() {}
+    constructor() {
+    }
+
+    get allGenres(): string[] {
+        return this.genres;
+    }
+
+    // ********************************** \\ ************************* 
+    // https://developer.spotify.com/documentation/web-api/reference/get-categories
+    // ********************************** \\ ************************* 
+
+    get allTracks(): any[] {
+        return this.tracks;
+    }
 
     fetchTokenFromAWS(): Observable<{ value: string; expiration: number }> {
         return from(request(AUTH_ENDPOINT)).pipe(
-            map(({ access_token, expires_in }) => {
+            map(({access_token, expires_in}) => {
                 const newToken = {
                     value: access_token,
                     expiration: Date.now() + (expires_in - 20) * 1000,
@@ -26,10 +39,6 @@ export class SpotifyService {
             })
         );
     }
-
-    // ********************************** \\ ************************* 
-    // https://developer.spotify.com/documentation/web-api/reference/get-categories
-    // ********************************** \\ ************************* 
 
     loadGenres(): Observable<string[]> {
         return from(fetchFromSpotify({
@@ -55,9 +64,17 @@ export class SpotifyService {
         );
     }
 
+    // ********************************** \\ ************************* 
+    // https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks
+    // ********************************** \\ ************************* 
+
     mapGenreToCategoryId(selectedGenre: String): String {
         return this.genreCategoryMapping[selectedGenre.toLowerCase()] || '';
     }
+
+    // ********************************** \\ ************************* 
+    // https://developer.spotify.com/documentation/web-api/reference/get-a-categories-playlists
+    // ********************************** \\ ************************* 
 
     fetchPlaylistByGenre(selectedGenre: String): Observable<any> {
         const categoryId = this.mapGenreToCategoryId(selectedGenre);
@@ -78,13 +95,9 @@ export class SpotifyService {
         );
     }
 
-    // ********************************** \\ ************************* 
-    // https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks
-    // ********************************** \\ ************************* 
-
     fetchTracksByPlaylistId(playlistId: string): Observable<any[]> {
         const endpoint = `playlists/${playlistId}/tracks`;
-        return from(fetchFromSpotify({ token: this.token, endpoint })).pipe(
+        return from(fetchFromSpotify({token: this.token, endpoint})).pipe(
             map((response) => {
                 const tracks = response.items.filter(
                     (track: any) => track.track.preview_url !== null
@@ -99,13 +112,9 @@ export class SpotifyService {
         );
     }
 
-    // ********************************** \\ ************************* 
-    // https://developer.spotify.com/documentation/web-api/reference/get-a-categories-playlists
-    // ********************************** \\ ************************* 
-
     getFirstPlaylistByCategory(categoryId: String): Observable<any> {
         const endpoint = `browse/categories/${categoryId}/playlists`;
-        return from(fetchFromSpotify({ token: this.token, endpoint })).pipe(
+        return from(fetchFromSpotify({token: this.token, endpoint})).pipe(
             map((response) => {
                 if (response.playlists.items.length > 0) {
                     return response.playlists.items[0];
@@ -122,13 +131,5 @@ export class SpotifyService {
 
     setToken(token: string) {
         this.token = token;
-    }
-
-    get allGenres(): string[] {
-        return this.genres;
-    }
-
-    get allTracks(): any[] {
-        return this.tracks;
     }
 }

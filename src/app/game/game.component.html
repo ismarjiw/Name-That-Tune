@@ -1,33 +1,31 @@
-<div *ngIf="!gameStarted">
-    <app-configuration (formSubmitted)="handleFormData($event)"></app-configuration>
-</div>
-
-<div class="loading"*ngIf="gameStarted && tracks.length === 0">
-    <p>Loading...</p>
-</div>
-
-<div class="game-container" *ngIf="gameStarted && tracks.length > 0">
-<!-- <div class="game-container" *ngIf="gameStarted && tracks.length === 0"> -->  
-<!-- for testing purposes  -->
-
-<!-- rendering tracks as a placeholder -->
-    <!-- <div *ngFor="let track of tracks">
-        <p>{{ track.track.name }}</p>
-        <p>{{ track.track.artists[0].name }}</p>
-        <audio controls>
-            <source [src]="track.track.preview_url" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-    </div> -->
-
-    <section class="audio-element">Music player here</section>
-    <div class="game-content">
+<app-configuration (formSubmitted)="handleFormSubmitted($event)" *ngIf="!gameStarted"></app-configuration>
+<!-- Game container -->
+<div *ngIf="gameStarted && !loading" class="game-container">
+    <div *ngIf="loading" class="loading">Loading...</div>
+    <!-- Timer -->
+    <div class="timer">Time: {{ gameTime }} seconds</div>
+    <!-- Music player -->
+    <section *ngIf="currentTrack && !gameOver" class="audio-element">
+        <audio #audioPlayer *ngIf="currentTrack" [src]="currentTrack.preview_url" controls type="audio/mpeg"></audio>
+    </section>
+    <!-- Questions and answers -->
+    <div *ngIf="!gameOver" class="game-content">
         <div class="mc-btns">
-            <app-button>Choice 1</app-button>
-            <app-button>Choice 2</app-button>
-            <app-button>Choice 3</app-button>
-            <app-button>Choice 4</app-button>
+            <!-- Generate buttons based on the choices for the current track -->
+            <button (click)="selectAnswer(choice)"
+                    *ngFor="let choice of currentChoices"
+                    [disabled]="!roundStarted">
+                {{ choice }}
+            </button>
         </div>
     </div>
-
+    <!-- Begin button -->
+    <button (click)="beginRound()" *ngIf="!roundStarted && !gameOver" class="start-btn">Begin</button>
+    <!-- Results and navigation to leaderboard -->
+    <div *ngIf="gameOver">
+        <!-- Display results -->
+        <p>Your score: {{ finalScore }}</p>
+        <!-- Button to leaderboard -->
+        <app-button [routerLink]="'/leaderboard'">Leaderboard</app-button>
+    </div>
 </div>

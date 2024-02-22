@@ -35,10 +35,42 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 1rem; 
+    gap: 1rem;
 }
 
 .config-options, .player-name, .start-btn {
     display: flex;
     justify-content: center;
+}
+
+.timer {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.mc-btns button {
+    padding: 10px;
+    margin: 5px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.mc-btns button:hover {
+    background-color: #e0e0e0;
+}
+
+.start-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.start-btn:hover {
+    background-color: #45a049;
 }

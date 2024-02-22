@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from "@angular/router";
 
@@ -15,7 +15,8 @@ export class ButtonComponent {
     @Output() buttonClick = new EventEmitter<void>();
 
     isButtonClicked = false;
-    // this can be removed or modified 
+
+    // this can be removed or modified
 
     constructor(private router: Router) {
     }
