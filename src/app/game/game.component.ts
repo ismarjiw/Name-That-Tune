@@ -107,7 +107,6 @@ export class GameComponent implements OnInit {
             return;
         }
         this.currentTrack = this.rounds[this.currentRound][0].track;
-        // this.currentTrackHowl = this.rounds[this.currentRound][0].track;
         if (!this.currentTrack) {
             console.error(`No track found for round: ${this.currentRound}`);
             return;
@@ -143,26 +142,20 @@ export class GameComponent implements OnInit {
     }
 
     playCurrentTrack(): void {
-        if (this.currentTrackHowl) {
-          this.currentTrackHowl.play();
-          this.showBars = true;
-        } 
-        else {
+        if (!this.currentTrackHowl) {
             // Create a new Howl instance if it doesn't exist
-            this.currentTrackHowl = new Howl({
-              src: [this.currentTrack.preview_url],
-              format: ['webm', 'mp3'] 
-            });
-            this.currentTrackHowl.play();
-            this.showBars = true;
-          }
+        this.currentTrackHowl = new Howl({
+            src: [this.currentTrack.preview_url],
+            format: ['webm', 'mp3'] 
+        });
+        this.currentTrackHowl.play();
+        this.showBars = true;
+        }
       }
 
       pauseCurrentTrack(): void {
-        if (this.currentTrackHowl) {
-          this.currentTrackHowl.pause();
-          this.showBars = false;
-        }
+            this.currentTrackHowl?.stop();
+            this.showBars = false;
       }
 
     shuffleArray(array: any[]): any[] {
@@ -211,6 +204,11 @@ export class GameComponent implements OnInit {
 
     nextRound(): void {
         console.log('Next Round');
+        // Destroy existing howl
+  if (this.currentTrackHowl) {
+    this.currentTrackHowl.unload();
+    this.currentTrackHowl = null; 
+  }
         if (this.currentRound < this.gameConfig.rounds - 1) {
             this.currentRound++;
             this.loadQuestion();
