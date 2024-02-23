@@ -6,6 +6,10 @@
 <div class="parent-container">
   <div *ngIf="gameStarted && !loading" class="game-container">
     <div *ngIf="loading" class="loading">Loading...</div>
+    <!-- Game Over -->
+    <div *ngIf="gameOver" class="game-over">Game Over</div>
+    <!-- Round -->
+    <div *ngIf="!gameOver" class="round">Round: {{ currentRound + 1 }}</div>
     <!-- Timer -->
     <div class="timer">Time: {{ gameTime }} seconds</div>
     <!-- Music player -->

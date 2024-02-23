@@ -6,6 +6,7 @@ import {tap} from "rxjs/operators";
 
 import {LocalStorageService} from 'ngx-webstorage';
 import { v4 as uuidv4 } from 'uuid';
+import {round} from "lodash";
 
 
 @Component({
@@ -114,7 +115,7 @@ export class GameComponent implements OnInit {
 
     generateChoices(): string[] {
         // Get a list of all track names
-        const allTrackNames = this.tracks.map(track => track.name);
+        const allTrackNames = this.tracks.map(track => track.track.name);
 
         // Shuffle the array and pick 3 random choices
         let choices = this.shuffleArray(allTrackNames).slice(0, 3);
@@ -228,5 +229,7 @@ export class GameComponent implements OnInit {
         this.gameStarted = true;
         this.initializeGame(gameId);
     }
+
+    protected readonly round = round;
 }
 
