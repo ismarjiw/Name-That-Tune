@@ -1,0 +1,49 @@
+<div *ngIf="authLoading || configLoading" class="loading">Loading...</div>
+
+<div class="parent-container">
+    <div *ngIf="!authLoading && !configLoading" class="config-content">
+
+        <div [formGroup]="gameForm">
+
+            <section class="player-name">PLAYER:<input formControlName="playerName" placeholder="ENTER NAME"
+                                                       type="text"/></section>
+
+            <div class="config-options">
+                <div class="difficulty-content">
+                    <h2>DIFFICULTY:</h2>
+                    <div class="config-btns">
+                        <app-button (click)="setDifficulty('Easy')" class="first-btn">EASY</app-button>
+                        <app-button (click)="setDifficulty('Medium')" class="second-btn">MEDIUM</app-button>
+                        <app-button (click)="setDifficulty('Hard')" class="third-btn">HARD</app-button>
+                    </div>
+                </div>
+
+                <div class="rounds-content">
+                    <h2>ROUNDS:</h2>
+                    <div class="config-btns">
+                        <app-button (click)="setRounds(5)" class="first-btn">5</app-button>
+                        <app-button (click)="setRounds(10)" class="second-btn">10</app-button>
+                        <app-button (click)="setRounds(15)" class="third-btn">15</app-button>
+                    </div>
+
+                </div>
+
+                <div class="genres-content">
+                    <h2>GENRES:</h2>
+                    <select (ngModelChange)="setGenre($event)" [(ngModel)]="selectedGenre" formControlName="genre">
+                        <option disabled selected value="">SELECT</option>
+                        <option *ngFor="let genre of genres" [value]="genre">
+                            {{ genre }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <section class="start-btn">
+                <app-button (click)="onSubmit()" type="submit">START</app-button>
+            </section>
+        </div>
+
+    </div>
+
+</div>

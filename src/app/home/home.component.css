@@ -1,0 +1,201 @@
+body, html {
+    margin: 0;
+    font-family: var(--main-font-family);
+    color: white;
+    background-color: #121212;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+section {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+footer {
+    background: #111;
+    font-family: var(--main-font-family);
+    color: #ddd;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+h1, h2 {
+    font-family: var(--main-font-family);
+    color: var(--text-color);
+}
+
+#welcome {
+    font-size: 2em;
+    background: linear-gradient(-45deg, var(--action-color), var(--accent-color), var(--form-bg-color), var(--secondary-bg-color), var(--primary-color), #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 12s ease infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#rules {
+    font-size: 1.5em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    padding-left: 50px;
+    background: var(--primary-color);
+}
+
+#rules h2 {
+    margin-bottom: 50px;
+}
+
+#rules app-button {
+    margin-top: 50px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.content-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.github-link img {
+    width: 40px;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.typewriter-text {
+    background: linear-gradient(90deg, var(--secondary-bg-color), var(--accent-color), var(--secondary-bg-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--main-font-family);
+    font-size: 1em;
+    white-space: pre;
+    text-align: left;
+}
+
+.bars {
+    align-items: flex-end;
+    justify-content: center;
+    display: flex;
+    gap: 0.25rem;
+
+    height: 4rem;
+}
+
+.bars__item {
+    animation: play 1s ease-out infinite;
+    background-image: linear-gradient(to top, rgb(248, 113, 0), rgb(255, 51, 153));
+    height: 100%;
+    width: 1rem;
+}
+
+.bars__item:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.bars__item:nth-child(2) {
+    animation-delay: 0.75s;
+}
+
+.bars__item:nth-child(3) {
+    animation-delay: 0.50s;
+}
+
+.bars__item:nth-child(4) {
+    animation-delay: 0.1s;
+}
+
+@keyframes play {
+    0% {
+        height: 10%;
+    }
+
+    25% {
+        height: 75%;
+    }
+
+    50% {
+        height: 50%;
+    }
+
+    75% {
+        height: 100%;
+    }
+
+    100% {
+        height: 10%;
+    }
+}
+
+.show {
+    opacity: 0.5;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    border-style: none;
+    margin-top: 15rem;
+    transition: opacity 0.2s ease-in-out; /* Transition for the button's opacity */
+}
+
+.show .top-icon {
+    fill: var(--primary-color); /* Set default color */
+    transition: fill 0.2s ease-in-out; /* Smooth transition for the fill property */
+}
+
+.show:hover .top-icon {
+    fill: var(--text-color); /* Set hover color */
+}
+
+.show:hover {
+    opacity: 1; /* Full opacity on hover */
+    background-color: var(--accent-color);
+}
+
+button svg {
+    height: 1.75rem;
+    width: 1.5rem;
+    padding: 0.75rem;
+}
+
