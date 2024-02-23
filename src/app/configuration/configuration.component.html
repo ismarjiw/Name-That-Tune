@@ -6,7 +6,7 @@
         <div [formGroup]="gameForm">
 
             <section class="player-name">PLAYER:<input formControlName="playerName" placeholder="ENTER NAME"
-                                                    type="text"/></section>
+                                                       type="text"/></section>
 
             <div class="config-options">
                 <div class="difficulty-content">
@@ -40,7 +40,7 @@
             </div>
 
             <section class="start-btn">
-                <app-button type="submit" (click)="onSubmit()">START</app-button>
+                <app-button (click)="onSubmit()" type="submit">START</app-button>
             </section>
         </div>
 

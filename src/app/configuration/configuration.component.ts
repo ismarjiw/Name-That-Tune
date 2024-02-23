@@ -8,7 +8,7 @@ import {LocalStorageService} from 'ngx-webstorage';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 
 @Component({
@@ -75,10 +75,11 @@ export class ConfigurationComponent implements OnInit {
 
         this.gameForm = this.fb.group({
             playerName: ['', Validators.required],
-            difficulty: ['', Validators.required],
-            rounds: ['', [Validators.required, Validators.min(5)]],
+            difficulty: [null, Validators.required],
+            rounds: [null, [Validators.required, Validators.min(5)]],
             genre: ['', Validators.required]
         });
+
     }
 
     setDifficulty(difficulty: string) {
@@ -114,37 +115,37 @@ export class ConfigurationComponent implements OnInit {
         const difficultyControl = this.gameForm.get('difficulty');
         const roundsControl = this.gameForm.get('rounds');
         const genreControl = this.gameForm.get('genre');
-      
+
         if (
-          playerNameControl?.valid &&
-          playerNameControl.value &&
-          difficultyControl?.valid &&
-          difficultyControl.value &&
-          roundsControl?.valid &&
-          roundsControl.value &&
-          genreControl?.valid &&
-          genreControl.value &&
-          this.selectedGenre
+            playerNameControl?.valid &&
+            playerNameControl.value &&
+            difficultyControl?.valid &&
+            difficultyControl.value &&
+            roundsControl?.valid &&
+            roundsControl.value &&
+            genreControl?.valid &&
+            genreControl.value &&
+            this.selectedGenre
         ) {
-          // Create a unique identifier for the game
-          const gameId = uuidv4();
-      
-          // Create a game configuration object
-          const gameConfig = {
-            playerName: this.gameForm.value.playerName,
-            difficulty: this.gameForm.value.difficulty,
-            rounds: this.gameForm.value.rounds,
-            genre: this.selectedGenre,
-          };
-      
-          // Save the game configuration to local storage
-          const gameConfigKey = `gameConfig-${gameId}`;
-          this.localSt.store(gameConfigKey, gameConfig);
-      
-          // Emit an event to notify the parent component that the game should start
-          this.formSubmitted.emit({ gameId, gameConfig });
+            // Create a unique identifier for the game
+            const gameId = uuidv4();
+
+            // Create a game configuration object
+            const gameConfig = {
+                playerName: this.gameForm.value.playerName,
+                difficulty: this.gameForm.value.difficulty,
+                rounds: this.gameForm.value.rounds,
+                genre: this.selectedGenre,
+            };
+
+            // Save the game configuration to local storage
+            const gameConfigKey = `gameConfig-${gameId}`;
+            this.localSt.store(gameConfigKey, gameConfig);
+
+            // Emit an event to notify the parent component that the game should start
+            this.formSubmitted.emit({gameId, gameConfig});
         } else {
-          console.error('Form is not valid or genre not selected:', this.gameForm.value);
+            console.error('Form is not valid or genre not selected:', this.gameForm.value);
         }
-      }
+    }
 }

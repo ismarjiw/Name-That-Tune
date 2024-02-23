@@ -38,27 +38,31 @@ h1, h2 {
 
 #welcome {
     font-size: 2em;
-    background: linear-gradient(-45deg, var(--action-color),var(--accent-color), var(--form-bg-color),var(--secondary-bg-color), var(--primary-color), #23d5ab); 
+    background: linear-gradient(-45deg, var(--action-color), var(--accent-color), var(--form-bg-color), var(--secondary-bg-color), var(--primary-color), #23d5ab);
     background-size: 400% 400%;
-    animation: gradient 12s ease infinite; 
-  }
+    animation: gradient 12s ease infinite;
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes gradient {
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradient {
     0% {
-      background-position: 0% 50%;
+        background-position: 0% 50%;
     }
     50% {
-      background-position: 100% 50%;
+        background-position: 100% 50%;
     }
     100% {
-      background-position: 0% 50%;
+        background-position: 0% 50%;
     }
-  }
+}
 
 #rules {
     font-size: 1.5em;
@@ -119,21 +123,26 @@ h1, h2 {
 
     height: 4rem;
 }
+
 .bars__item {
     animation: play 1s ease-out infinite;
     background-image: linear-gradient(to top, rgb(248, 113, 0), rgb(255, 51, 153));
     height: 100%;
     width: 1rem;
 }
+
 .bars__item:nth-child(1) {
     animation-delay: 0s;
 }
+
 .bars__item:nth-child(2) {
     animation-delay: 0.75s;
 }
+
 .bars__item:nth-child(3) {
     animation-delay: 0.50s;
 }
+
 .bars__item:nth-child(4) {
     animation-delay: 0.1s;
 }
@@ -163,13 +172,26 @@ h1, h2 {
 .show {
     opacity: 0.5;
     cursor: pointer;
-    color: rgb(108 121 131);
-    background-color: rgb(0 0 0);
+    background-color: rgb(255, 255, 255);
     border-radius: 50%;
     border-style: none;
     margin-top: 15rem;
+    transition: opacity 0.2s ease-in-out; /* Transition for the button's opacity */
 }
 
+.show .top-icon {
+    fill: var(--primary-color); /* Set default color */
+    transition: fill 0.2s ease-in-out; /* Smooth transition for the fill property */
+}
+
+.show:hover .top-icon {
+    fill: var(--text-color); /* Set hover color */
+}
+
+.show:hover {
+    opacity: 1; /* Full opacity on hover */
+    background-color: var(--accent-color);
+}
 
 button svg {
     height: 1.75rem;

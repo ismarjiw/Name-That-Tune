@@ -42,6 +42,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.observer.observe(this.rulesText.nativeElement);
     }
 
+    scrollToTop() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
     private typeOutRules(ruleIndex: number): void {
         if (ruleIndex >= this.rules.length) {
             this.showGameButton = true;
@@ -69,9 +73,5 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 }
             }
         }, this.typingSpeed);
-    }
-
-    scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }

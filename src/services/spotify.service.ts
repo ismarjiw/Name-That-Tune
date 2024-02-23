@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, of} from 'rxjs';
+import {from, Observable, of, throwError} from 'rxjs';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import fetchFromSpotify, {request} from 'src/services/api';
 import {AUTH_ENDPOINT} from '../app/home/home.component'
@@ -12,6 +12,8 @@ export class SpotifyService {
     private genres: string[] = [];
     private tracks: any[] = [];
     private genreCategoryMapping: { [genre: string]: string } = {};
+    private numberOfPlaylistsToFetch = 10;
+
 
     constructor() {
     }
@@ -83,14 +85,37 @@ export class SpotifyService {
             return of(null);
         }
 
-        return this.getFirstPlaylistByCategory(categoryId).pipe(
-            mergeMap((firstPlaylist) => {
-                if (!firstPlaylist) {
+        return this.getRandomPlaylistByCategory(categoryId).pipe(
+            mergeMap((randomPlaylist) => {
+                if (!randomPlaylist) {
                     return of(null);
                 }
-                return this.fetchTracksByPlaylistId(firstPlaylist.id).pipe(
-                    map(() => firstPlaylist)
+                return this.fetchTracksByPlaylistId(randomPlaylist.id).pipe(
+                    map(() => randomPlaylist)
                 );
+            })
+        );
+    }
+
+    getRandomPlaylistByCategory(categoryId: String): Observable<any> {
+        const endpoint = `browse/categories/${categoryId}/playlists?limit=${this.numberOfPlaylistsToFetch}`;
+        return from(fetchFromSpotify({token: this.token, endpoint})).pipe(
+            mergeMap((response) => {
+                const playlists = response.playlists.items;
+                const playlistsWithTracks = playlists.filter((playlist: {
+                    tracks: { total: number; };
+                }) => playlist.tracks.total > 0);
+                if (playlistsWithTracks.length > 0) {
+                    // Select a random playlist that has tracks
+                    const randomIndex = Math.floor(Math.random() * playlistsWithTracks.length);
+                    return of(playlistsWithTracks[randomIndex]);
+                } else {
+                    return throwError('No playlists with tracks found');
+                }
+            }),
+            catchError((error) => {
+                console.error('Error fetching playlists with tracks:', error);
+                return of(null);
             })
         );
     }
@@ -112,22 +137,23 @@ export class SpotifyService {
         );
     }
 
-    getFirstPlaylistByCategory(categoryId: String): Observable<any> {
-        const endpoint = `browse/categories/${categoryId}/playlists`;
-        return from(fetchFromSpotify({token: this.token, endpoint})).pipe(
-            map((response) => {
-                if (response.playlists.items.length > 0) {
-                    return response.playlists.items[0];
-                } else {
-                    return null;
-                }
-            }),
-            catchError((error) => {
-                console.error('Error fetching playlists:', error);
-                return of(null);
-            })
-        );
-    }
+    //
+    // getFirstPlaylistByCategory(categoryId: String): Observable<any> {
+    //     const endpoint = `browse/categories/${categoryId}/playlists`;
+    //     return from(fetchFromSpotify({token: this.token, endpoint})).pipe(
+    //         map((response) => {
+    //             if (response.playlists.items.length > 0) {
+    //                 return response.playlists.items[0];
+    //             } else {
+    //                 return null;
+    //             }
+    //         }),
+    //         catchError((error) => {
+    //             console.error('Error fetching playlists:', error);
+    //             return of(null);
+    //         })
+    //     );
+    // }
 
     setToken(token: string) {
         this.token = token;

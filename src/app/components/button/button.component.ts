@@ -16,8 +16,6 @@ export class ButtonComponent {
 
     isButtonClicked = false;
 
-    // this can be removed or modified
-
     constructor(private router: Router) {
     }
 
@@ -37,7 +35,6 @@ export class ButtonComponent {
         }
     }
 
-    // this can be removed or modified 
     toggleButtonState() {
         this.isButtonClicked = !this.isButtonClicked;
     }

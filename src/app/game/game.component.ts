@@ -5,7 +5,7 @@ import {EMPTY, Subscription, switchMap} from "rxjs";
 import {tap} from "rxjs/operators";
 
 import {LocalStorageService} from 'ngx-webstorage';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {round} from "lodash";
 
 
@@ -31,6 +31,9 @@ export class GameComponent implements OnInit {
     loading: boolean = false; // Will be set to true when the game starts
     showBars: boolean = false;
     isLoadingTracks: boolean = true;
+    hidden: boolean = false;
+    protected readonly round = round;
+    private playbackTimeout: any;
 
     constructor(
         private spotifyService: SpotifyService,
@@ -109,6 +112,7 @@ export class GameComponent implements OnInit {
             return;
         }
         this.currentChoices = this.generateChoices();
+        this.setAudioPlaybackDuration();
         console.log('Current track:', this.currentTrack);
         console.log('Choices:', this.currentChoices);
     }
@@ -131,15 +135,47 @@ export class GameComponent implements OnInit {
     }
 
     playCurrentTrack(): void {
-        console.log('Playing track:', this.currentTrack.name);
         if (this.audioPlayer && this.audioPlayer.nativeElement) {
-            this.audioPlayer.nativeElement.play();
+            const audio = this.audioPlayer.nativeElement;
+            audio.currentTime = 0; // Reset time to 0
+            audio.play();
             this.showBars = true;
+
+            // Determine the duration
+            let duration = 30000; // Default to 30 seconds
+            if (this.gameConfig.difficulty === 'Medium') duration = 15000;
+            if (this.gameConfig.difficulty === 'Hard') duration = 5000;
+
+            // Set timeout to pause the audio after the duration
+            this.clearPlaybackTimeout(); // Clear any existing timeouts
+            this.playbackTimeout = setTimeout(() => {
+                audio.pause();
+            }, duration);
         }
     }
 
+    setAudioPlaybackDuration(): void {
+        if (!this.audioPlayer || !this.audioPlayer.nativeElement) {
+            return;
+        }
+
+        const difficulty = this.gameConfig.difficulty;
+        let playbackDuration = 30000;
+
+        if (difficulty === 'Medium') {
+            playbackDuration = 15000;
+        } else if (difficulty === 'Hard') {
+            playbackDuration = 5000;
+        }
+
+        this.audioPlayer.nativeElement.onplay = () => {
+            this.playbackTimeout = setTimeout(() => {
+                this.pauseCurrentTrack();
+            }, playbackDuration);
+        };
+    }
+
     pauseCurrentTrack(): void {
-        console.log('Pausing track:', this.currentTrack.name);
         if (this.audioPlayer && this.audioPlayer.nativeElement) {
             this.audioPlayer.nativeElement.pause();
             this.showBars = false;
@@ -168,8 +204,8 @@ export class GameComponent implements OnInit {
     selectAnswer(trackName: string): void {
         this.pauseCurrentTrack();
         console.log('Selected Answer: ', trackName);
+        this.hidden = true;
         this.stopGameTimer();
-        this.roundStarted = false;
         if (this.isAnswerCorrect(trackName)) {
             this.finalScore += 250; // Increase score for correct answer
         }
@@ -189,6 +225,8 @@ export class GameComponent implements OnInit {
         if (this.currentRound < this.gameConfig.rounds - 1) {
             this.currentRound++;
             this.loadQuestion();
+            this.hidden = false;
+            this.roundStarted = false;
         } else {
             this.endGame();
         }
@@ -223,13 +261,21 @@ export class GameComponent implements OnInit {
     }
 
     handleFormSubmitted(event: { gameId: string; config: any }) {
-        const { gameId, config } = event;
+        const {gameId, config} = event;
         this.gameConfig = config;
         this.loading = true;
         this.gameStarted = true;
         this.initializeGame(gameId);
     }
 
-    protected readonly round = round;
+    ngOnDestroy(): void {
+        this.clearPlaybackTimeout(); // Clear the timeout when the component is destroyed
+    }
+
+    private clearPlaybackTimeout(): void {
+        if (this.playbackTimeout) {
+            clearTimeout(this.playbackTimeout);
+        }
+    }
 }
 

@@ -29,7 +29,7 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 
         .svg-icon {
-            transform: rotate(90deg); 
+            transform: rotate(90deg);
         }
     }
 }
@@ -52,7 +52,7 @@
 svg {
     margin-top: 0.8rem;
     margin-right: 1rem;
-    transition: transform 0.2s ease-in-out; 
+    transition: transform 0.2s ease-in-out;
 }
 
 h1 {
@@ -68,7 +68,7 @@ h1 {
         text-align: center;
         width: 100%;
     }
-    
+
 }
 
 .profile-section {

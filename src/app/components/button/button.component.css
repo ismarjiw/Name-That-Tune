@@ -18,5 +18,5 @@
 
 .button-style:hover, .clicked {
     background-color: var(--accent-color);
+    color: var(--text-color)
 }
-

@@ -1,62 +1,59 @@
 <app-configuration
-  (formSubmitted)="handleFormSubmitted($event)"
-  *ngIf="!gameStarted"
+        (formSubmitted)="handleFormSubmitted($event)"
+        *ngIf="!gameStarted"
 ></app-configuration>
 <!-- Game container -->
 <div class="parent-container">
-  <div *ngIf="gameStarted && !loading" class="game-container">
-    <div *ngIf="loading" class="loading">Loading...</div>
-    <!-- Game Over -->
-    <div *ngIf="gameOver" class="game-over">Game Over</div>
-    <!-- Round -->
-    <div *ngIf="!gameOver" class="round">Round: {{ currentRound + 1 }}</div>
-    <!-- Timer -->
-    <div class="timer">Time: {{ gameTime }} seconds</div>
-    <!-- Music player -->
-    <section *ngIf="currentTrack && !gameOver" class="audio-element">
-      <audio
-        #audioPlayer
-        *ngIf="currentTrack"
-        [src]="currentTrack.preview_url"
-        controls
-        type="audio/mpeg"
-      ></audio>
-    </section>
-    <div *ngIf="showBars" class="bars">
-      <div class="bars__item"></div>
-      <div class="bars__item"></div>
-      <div class="bars__item"></div>
-      <div class="bars__item"></div>
-    </div>
-    <!-- Questions and answers -->
-    <div *ngIf="!gameOver" class="game-content">
-      <div *ngIf="isLoadingTracks" class="loading">Loading tracks...</div>
-      <div class="mc-btns">
-        <!-- Generate buttons based on the choices for the current track -->
+    <div *ngIf="gameStarted && !loading" class="game-container">
+        <div *ngIf="loading" class="loading">Loading...</div>
+        <!-- Game Over -->
+        <div *ngIf="gameOver" class="game-over">Game Over</div>
+        <!-- Round -->
+        <div *ngIf="!gameOver" class="round">Round: {{ currentRound + 1 }}</div>
+        <!-- Timer -->
+        <div class="timer">Time: {{ gameTime }} seconds</div>
+
+        <!-- Music player -->
+        <section *ngIf="currentTrack && !gameOver" class="audio-element">
+            <audio #audioPlayer (pause)="pauseCurrentTrack()" (play)="playCurrentTrack()" *ngIf="currentTrack" [src]="currentTrack.preview_url"
+                   controls type="audio/mpeg"></audio>
+        </section>
+        <div *ngIf="showBars" class="bars">
+            <div class="bars__item"></div>
+            <div class="bars__item"></div>
+            <div class="bars__item"></div>
+            <div class="bars__item"></div>
+        </div>
+        <!-- Questions and answers -->
+        <div *ngIf="!gameOver" class="game-content">
+            <div *ngIf="isLoadingTracks" class="loading">Loading tracks...</div>
+            <div class="mc-btns">
+                <!-- Generate buttons based on the choices for the current track -->
+                <button
+                        (click)="selectAnswer(choice)"
+                        *ngFor="let choice of currentChoices"
+                        [disabled]="!roundStarted"
+                        [hidden]="hidden"
+                >
+                    {{ choice }}
+                </button>
+            </div>
+        </div>
+        <!-- Begin button -->
         <button
-          (click)="selectAnswer(choice)"
-          *ngFor="let choice of currentChoices"
-          [disabled]="!roundStarted"
+                (click)="beginRound()"
+                *ngIf="!roundStarted && !gameOver"
+                class="start-btn"
         >
-          {{ choice }}
+            Begin
         </button>
-      </div>
+        <!-- Results and navigation to leaderboard -->
+        <div *ngIf="gameOver">
+            <!-- Display results -->
+            <p>Your score: {{ finalScore }}</p>
+            <p class="check-score">See how you stack up by checking out the leaderboard page:</p>
+            <!-- Button to leaderboard -->
+            <app-button [routerLink]="'/leaderboard'">Leaderboard</app-button>
+        </div>
     </div>
-    <!-- Begin button -->
-    <button
-      (click)="beginRound()"
-      *ngIf="!roundStarted && !gameOver"
-      class="start-btn"
-    >
-      Begin
-    </button>
-    <!-- Results and navigation to leaderboard -->
-    <div *ngIf="gameOver">
-      <!-- Display results -->
-      <p>Your score: {{ finalScore }}</p>
-      <p class="check-score">See how you stack up by checking out the leaderboard page:</p>
-      <!-- Button to leaderboard -->
-      <app-button [routerLink]="'/leaderboard'">Leaderboard</app-button>
-    </div>
-  </div>
 </div>
