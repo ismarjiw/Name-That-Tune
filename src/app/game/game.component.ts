@@ -6,6 +6,7 @@ import {tap} from "rxjs/operators";
 
 import {LocalStorageService} from 'ngx-webstorage';
 import { v4 as uuidv4 } from 'uuid';
+import { Howl } from 'howler'; 
 
 
 @Component({
@@ -14,7 +15,6 @@ import { v4 as uuidv4 } from 'uuid';
     styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements OnInit {
-    @ViewChild('audioPlayer', {static: false}) audioPlayer: ElementRef | undefined;
     gameConfig: any;
     gameStarted: boolean = false;
     tracks: any[] = [];
@@ -30,6 +30,10 @@ export class GameComponent implements OnInit {
     loading: boolean = false; // Will be set to true when the game starts
     showBars: boolean = false;
     isLoadingTracks: boolean = true;
+
+    playDuration: number = 30;
+    currentTrackHowl: Howl | null = null; // Store the Howl instance for the current track
+    trackTimer: any;
 
     constructor(
         private spotifyService: SpotifyService,
@@ -103,6 +107,7 @@ export class GameComponent implements OnInit {
             return;
         }
         this.currentTrack = this.rounds[this.currentRound][0].track;
+        // this.currentTrackHowl = this.rounds[this.currentRound][0].track;
         if (!this.currentTrack) {
             console.error(`No track found for round: ${this.currentRound}`);
             return;
@@ -110,6 +115,14 @@ export class GameComponent implements OnInit {
         this.currentChoices = this.generateChoices();
         console.log('Current track:', this.currentTrack);
         console.log('Choices:', this.currentChoices);
+
+        if (this.gameConfig.difficulty === 'Medium') {
+            this.playDuration = 15; 
+        } else if (this.gameConfig.difficulty === 'Hard') {
+            this.playDuration = 5;
+        } else { 
+            this.playDuration = this.playDuration; 
+        }
     }
 
     generateChoices(): string[] {
@@ -130,20 +143,27 @@ export class GameComponent implements OnInit {
     }
 
     playCurrentTrack(): void {
-        console.log('Playing track:', this.currentTrack.name);
-        if (this.audioPlayer && this.audioPlayer.nativeElement) {
-            this.audioPlayer.nativeElement.play();
+        if (this.currentTrackHowl) {
+          this.currentTrackHowl.play();
+          this.showBars = true;
+        } 
+        else {
+            // Create a new Howl instance if it doesn't exist
+            this.currentTrackHowl = new Howl({
+              src: [this.currentTrack.preview_url],
+              format: ['webm', 'mp3'] 
+            });
+            this.currentTrackHowl.play();
             this.showBars = true;
-        }
-    }
+          }
+      }
 
-    pauseCurrentTrack(): void {
-        console.log('Pausing track:', this.currentTrack.name);
-        if (this.audioPlayer && this.audioPlayer.nativeElement) {
-            this.audioPlayer.nativeElement.pause();
-            this.showBars = false;
+      pauseCurrentTrack(): void {
+        if (this.currentTrackHowl) {
+          this.currentTrackHowl.pause();
+          this.showBars = false;
         }
-    }
+      }
 
     shuffleArray(array: any[]): any[] {
         for (let i = array.length - 1; i > 0; i--) {
@@ -161,7 +181,13 @@ export class GameComponent implements OnInit {
         console.log('Begin round with track:', this.currentTrack.name);
         this.roundStarted = true;
         this.startGameTimer();
-        this.playCurrentTrack();
+        this.loadQuestion();
+        setTimeout(() => {
+            this.playCurrentTrack();
+            setTimeout(() => {
+                this.pauseCurrentTrack();
+            }, this.playDuration * 1000);
+        });
     }
 
     selectAnswer(trackName: string): void {

@@ -9,7 +9,7 @@
     <!-- Timer -->
     <div class="timer">Time: {{ gameTime }} seconds</div>
     <!-- Music player -->
-    <section *ngIf="currentTrack && !gameOver" class="audio-element">
+    <!-- <section *ngIf="currentTrack && !gameOver" class="audio-element">
       <audio
         #audioPlayer
         *ngIf="currentTrack"
@@ -17,7 +17,7 @@
         controls
         type="audio/mpeg"
       ></audio>
-    </section>
+    </section> -->
     <div *ngIf="showBars" class="bars">
       <div class="bars__item"></div>
       <div class="bars__item"></div>
@@ -40,7 +40,7 @@
     </div>
     <!-- Begin button -->
     <button
-      (click)="beginRound()"
+      (click)="beginRound(); playCurrentTrack()"
       *ngIf="!roundStarted && !gameOver"
       class="start-btn"
     >
