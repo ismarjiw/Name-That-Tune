@@ -210,9 +210,9 @@ export class GameComponent implements OnInit {
             this.finalScore += 250; // Increase score for correct answer
         }
         // Move to the next round after a slight delay
-        setTimeout(() => {
+        // setTimeout(() => {
             this.nextRound();
-        }, 1000);
+        // }, 1000);
     }
 
     isAnswerCorrect(answer: string): boolean {
