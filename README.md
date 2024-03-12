@@ -30,7 +30,7 @@
 
 ### Live Demo
 
-To experience "Name That Tune" yourself, please check it out by visiting the live demo: [meet-name-that-tune.netlify.app/](meet-name-that-tune.netlify.app/)
+To experience "Name That Tune" yourself, please check it out by visiting the live demo: [meet-name-that-tune.netlify.app/](https://meet-name-that-tune.netlify.app/)
 
 ### Getting Started
 
