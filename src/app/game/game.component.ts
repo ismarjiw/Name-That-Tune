@@ -8,6 +8,8 @@ import {LocalStorageService} from 'ngx-webstorage';
 import {v4 as uuidv4} from 'uuid';
 import {round} from "lodash";
 
+import { Howl } from 'howler'; 
+
 
 @Component({
     selector: 'app-game',
@@ -31,9 +33,14 @@ export class GameComponent implements OnInit {
     loading: boolean = false; // Will be set to true when the game starts
     showBars: boolean = false;
     isLoadingTracks: boolean = true;
+
     hidden: boolean = false;
     protected readonly round = round;
     private playbackTimeout: any;
+
+    playDuration: number = 30;
+    currentTrackHowl: Howl | null = null; // Store the Howl instance for the current track
+    trackTimer: any;
 
     constructor(
         private spotifyService: SpotifyService,
@@ -112,9 +119,16 @@ export class GameComponent implements OnInit {
             return;
         }
         this.currentChoices = this.generateChoices();
-        this.setAudioPlaybackDuration();
         console.log('Current track:', this.currentTrack);
         console.log('Choices:', this.currentChoices);
+
+        if (this.gameConfig.difficulty === 'Medium') {
+            this.playDuration = 15; 
+        } else if (this.gameConfig.difficulty === 'Hard') {
+            this.playDuration = 5;
+        } else { 
+            this.playDuration = this.playDuration; 
+        }
     }
 
     generateChoices(): string[] {
@@ -135,57 +149,26 @@ export class GameComponent implements OnInit {
     }
 
     playCurrentTrack(): void {
-        if (this.audioPlayer && this.audioPlayer.nativeElement) {
-            const audio = this.audioPlayer.nativeElement;
-            audio.currentTime = 0; // Reset time to 0
-            audio.play();
-            this.showBars = true;
-
-            // Determine the duration
-            let duration = 30000; // Default to 30 seconds
-            if (this.gameConfig.difficulty === 'Medium') duration = 15000;
-            if (this.gameConfig.difficulty === 'Hard') duration = 5000;
-
-            // Set timeout to pause the audio after the duration
-            this.clearPlaybackTimeout(); // Clear any existing timeouts
-            this.playbackTimeout = setTimeout(() => {
-                audio.pause();
-            }, duration);
+        if (!this.currentTrackHowl) {
+            // Create a new Howl instance if it doesn't exist
+        this.currentTrackHowl = new Howl({
+            src: [this.currentTrack.preview_url],
+            format: ['webm', 'mp3'] 
+        });
+        this.currentTrackHowl.play();
+        this.showBars = true;
         }
-    }
-
-    setAudioPlaybackDuration(): void {
-        if (!this.audioPlayer || !this.audioPlayer.nativeElement) {
-            return;
-        }
-
-        const difficulty = this.gameConfig.difficulty;
-        let playbackDuration = 30000;
-
-        if (difficulty === 'Medium') {
-            playbackDuration = 15000;
-        } else if (difficulty === 'Hard') {
-            playbackDuration = 5000;
-        }
-
-        this.audioPlayer.nativeElement.onplay = () => {
-            this.playbackTimeout = setTimeout(() => {
-                this.pauseCurrentTrack();
-            }, playbackDuration);
-        };
     }
 
     pauseCurrentTrack(): void {
-        if (this.audioPlayer && this.audioPlayer.nativeElement) {
-            this.audioPlayer.nativeElement.pause();
-            this.showBars = false;
-        }
+        this.currentTrackHowl?.stop();
+        this.showBars = false;
     }
 
     shuffleArray(array: any[]): any[] {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            [array[i], array[j]] = [array[j], array[i]]; 
         }
         return array;
     }
@@ -198,21 +181,24 @@ export class GameComponent implements OnInit {
         console.log('Begin round with track:', this.currentTrack.name);
         this.roundStarted = true;
         this.startGameTimer();
-        this.playCurrentTrack();
+        this.loadQuestion();
+        setTimeout(() => {
+            this.playCurrentTrack();
+            setTimeout(() => {
+                this.pauseCurrentTrack();
+            }, this.playDuration * 1000);
+        });
     }
 
     selectAnswer(trackName: string): void {
         this.pauseCurrentTrack();
         console.log('Selected Answer: ', trackName);
-        this.hidden = true;
         this.stopGameTimer();
+        this.roundStarted = false;
         if (this.isAnswerCorrect(trackName)) {
-            this.finalScore += 250; // Increase score for correct answer
+            this.finalScore += 250; 
         }
-        // Move to the next round after a slight delay
-        // setTimeout(() => {
-            this.nextRound();
-        // }, 1000);
+        this.nextRound();
     }
 
     isAnswerCorrect(answer: string): boolean {
@@ -222,11 +208,14 @@ export class GameComponent implements OnInit {
 
     nextRound(): void {
         console.log('Next Round');
+        // Destroy existing howl
+    if (this.currentTrackHowl) {
+    this.currentTrackHowl.unload();
+    this.currentTrackHowl = null; 
+    }
         if (this.currentRound < this.gameConfig.rounds - 1) {
             this.currentRound++;
             this.loadQuestion();
-            this.hidden = false;
-            this.roundStarted = false;
         } else {
             this.endGame();
         }
@@ -266,16 +255,6 @@ export class GameComponent implements OnInit {
         this.loading = true;
         this.gameStarted = true;
         this.initializeGame(gameId);
-    }
-
-    ngOnDestroy(): void {
-        this.clearPlaybackTimeout(); // Clear the timeout when the component is destroyed
-    }
-
-    private clearPlaybackTimeout(): void {
-        if (this.playbackTimeout) {
-            clearTimeout(this.playbackTimeout);
-        }
     }
 }
 

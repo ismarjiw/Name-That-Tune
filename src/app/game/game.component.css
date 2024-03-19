@@ -1,3 +1,15 @@
+.correct-answer {
+    background-color: #2ECC71; /* Light green */
+    box-shadow: 0 0 5px 3px #27AE60; /* Green glow effect */
+    color: white; /* White text for better contrast */
+  }
+  
+  .wrong-answer {
+    background-color: #F39C12; /* Light red */
+    box-shadow: 0 0 5px 3px #C9302C; /* Red glow effect */
+    color: white; /* White text for better contrast */
+  }
+
 .loading {
     font-family: var(--main-font-family);
     font-weight: 400;
